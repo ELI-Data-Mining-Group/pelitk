@@ -5,13 +5,14 @@ docs
 
 import pickle
 import re
+import math
 from nltk.corpus import wordnet
 
 
 __version__ = '0.1'
 __author__ = 'ELI Data Mining Group'
 
-with open('lemmatizer.pkl', 'rb') as f:
+with open('data/lemmatizer.pkl', 'rb') as f:
     LOOKUP = pickle.load(f)
 def lemmatize(tokens):
     """ Lemmatize with lookup table and return list of corresponding lemmas """
@@ -33,8 +34,21 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None, spellcheck=True):
     custom_list is a custom list of common types for frequency list
     """
 
+    file_map = {
+        'NGSL': 'data/wordlists/ngsl_2k.txt',
+        'PET': 'data/wordlists/pet_coca_2k.txt',
+        'PELIC': 'data/wordlists/pelic_l3_2k.txt'
+    }
     if custom_list is not None:
-        common_types = list(set(custom_list))
+        common_types = set(custom_list)
+    elif freq_list in file_map.keys():
+        with open(file_map[freq_list]) as f:
+            common_types = set([x.strip() for x in f.readlines()])
+    else:
+        print('Please specify an appropriate frequency list with custom_list or\
+               set freq_list to one of NGSL, PET, PELIC.')
+        return None
+
     tokens = re_tokenize(text)
     if len(tokens) == 0:
         return 0
@@ -44,4 +58,4 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None, spellcheck=True):
         lemma = LOOKUP.get(token, token)
         if lemma not in common_types and (not spellcheck or wordnet.synsets(lemma)):
             advanced.add(lemma)
-    return len(advanced)
+    return len(advanced)/math.sqrt(len(tokens))
