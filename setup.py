@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from setuptools import setup, find_packages
+import sys
+from os import path
 
+here = path.abspath(path.dirname(__file__))
 
 with open('README.rst') as f:
     readme = f.read()
@@ -18,5 +21,8 @@ setup(
     author_email='daniel.zheng@pitt.edu',
     url='https://github.com/ELI-Data-Mining-Group/lextools',
     license=license,
-    packages=find_packages(exclude=('tests', 'docs'))
+    packages=find_packages(exclude=('tests', 'docs')),
+    package_data={'lextools': ['data/wordlists/*.txt', 'data/*.pkl']},
+    include_package_data=True
+
 )

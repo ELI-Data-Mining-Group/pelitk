@@ -7,14 +7,21 @@ import pickle
 import re
 import sys
 import math
+import pkgutil
+from pkg_resources import resource_filename
 from nltk.corpus import wordnet
 
 
 __version__ = '0.1'
 __author__ = 'ELI Data Mining Group'
 
-with open('data/lemmatizer.pkl', 'rb') as f:
-    LOOKUP = pickle.load(f)
+FILE_MAP = {
+    'NGSL': resource_filename('lextools', 'data/wordlists/ngsl_2k.txt'),
+    'PET': resource_filename('lextools', 'data/wordlists/pet_coca_2k.txt'),
+    'PELIC': resource_filename('lextools', 'data/wordlists/pelic_l3_2k.txt')
+}
+
+LOOKUP = pickle.loads(pkgutil.get_data('lextools', 'data/lemmatizer.pkl'))
 def lemmatize(tokens):
     """ Lemmatize with lookup table and return list of corresponding lemmas """
     return [LOOKUP.get(x, x) for x in tokens]
@@ -35,18 +42,14 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None, spellcheck=True):
     custom_list is a custom list of common types for frequency list
     """
 
-    file_map = {
-        'NGSL': 'data/wordlists/ngsl_2k.txt',
-        'PET': 'data/wordlists/pet_coca_2k.txt',
-        'PELIC': 'data/wordlists/pelic_l3_2k.txt'
-    }
+
     if custom_list is not None:
         if not isinstance(custom_list, list):
             raise TypeError('Please specify a list of strings for custom_list')
         common_types = set(custom_list)
     else:
         try:
-            with open(file_map[freq_list]) as f:
+            with open(FILE_MAP[freq_list]) as f:
                 common_types = set([x.strip() for x in f.readlines()])
         except KeyError as e:
             raise KeyError \
