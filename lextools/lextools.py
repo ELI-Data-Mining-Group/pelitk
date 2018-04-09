@@ -5,6 +5,7 @@ docs
 
 import pickle
 import re
+import sys
 import math
 from nltk.corpus import wordnet
 
@@ -40,14 +41,18 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None, spellcheck=True):
         'PELIC': 'data/wordlists/pelic_l3_2k.txt'
     }
     if custom_list is not None:
+        if isinstance(custom_list, list):
+            raise TypeError('Please specify a list of strings for custom_list')
         common_types = set(custom_list)
-    elif freq_list in file_map.keys():
-        with open(file_map[freq_list]) as f:
-            common_types = set([x.strip() for x in f.readlines()])
     else:
-        print('Please specify an appropriate frequency list with custom_list or\
-               set freq_list to one of NGSL, PET, PELIC.')
-        return None
+        try:
+            with open(file_map[freq_list]) as f:
+                common_types = set([x.strip() for x in f.readlines()])
+        except KeyError as e:
+            raise KeyError \
+                ('Please specify an appropriate frequency list with' \
+                'custom_list or set freq_list to one of NGSL, PET, PELIC.')
+
 
     tokens = re_tokenize(text)
     if len(tokens) == 0:
