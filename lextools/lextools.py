@@ -41,7 +41,7 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None, spellcheck=True):
         'PELIC': 'data/wordlists/pelic_l3_2k.txt'
     }
     if custom_list is not None:
-        if isinstance(custom_list, list):
+        if not isinstance(custom_list, list):
             raise TypeError('Please specify a list of strings for custom_list')
         common_types = set(custom_list)
     else:
@@ -53,8 +53,8 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None, spellcheck=True):
                 ('Please specify an appropriate frequency list with' \
                 'custom_list or set freq_list to one of NGSL, PET, PELIC.')
 
-
     tokens = re_tokenize(text)
+
     if len(tokens) == 0:
         return 0
 
