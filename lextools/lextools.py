@@ -48,13 +48,14 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None, spellcheck=True):
             raise TypeError('Please specify a list of strings for custom_list')
         common_types = set(custom_list)
     else:
-        try:
-            with open(FILE_MAP[freq_list]) as f:
-                common_types = set([x.strip() for x in f.readlines()])
-        except KeyError as e:
+        if freq_list not in FILE_MAP:
             raise KeyError \
-                ('Please specify an appropriate frequency list with' \
-                'custom_list or set freq_list to one of NGSL, PET, PELIC.')
+                    ('Please specify an appropriate frequency list with' \
+                    'custom_list or set freq_list to one of NGSL, PET, PELIC.')
+                    
+        with open(FILE_MAP[freq_list]) as f:
+            common_types = set([x.strip() for x in f.readlines()])
+
 
     tokens = re_tokenize(text)
 
