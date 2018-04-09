@@ -26,3 +26,6 @@ setup(
     package_data={'lextools': ['data/wordlists/*.txt', 'data/*.pkl']},
     include_package_data=True
 )
+
+import nltk
+nltk.download('wordnet')
