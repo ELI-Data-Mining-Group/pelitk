@@ -21,8 +21,8 @@ setup(
     author_email='daniel.zheng@pitt.edu',
     url='https://github.com/ELI-Data-Mining-Group/lextools',
     license=license,
+    install_requires=['nltk'],
     packages=find_packages(exclude=('tests', 'docs')),
     package_data={'lextools': ['data/wordlists/*.txt', 'data/*.pkl']},
     include_package_data=True
-
 )
