@@ -28,4 +28,5 @@ setup(
 )
 
 import nltk
-nltk.download('wordnet')
+if 'install' in sys.argv:
+    nltk.download('wordnet')

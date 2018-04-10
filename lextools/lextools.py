@@ -5,7 +5,6 @@ docs
 
 import pickle
 import re
-import sys
 import math
 import pkgutil
 from pkg_resources import resource_filename
@@ -30,7 +29,7 @@ def lemmatize(tokens):
 def re_tokenize(text):
     """
     Returns a list of tokens from input text
-    Lowercase input, removing symbols and digts.
+    Lowercase input, removing symbols and digits.
     """
     return re.findall(r"[A-Za-z]+", text.lower())
 
@@ -52,9 +51,8 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None, spellcheck=True):
             raise KeyError \
                     ('Please specify an appropriate frequency list with' \
                     'custom_list or set freq_list to one of NGSL, PET, PELIC.')
-                    
-        with open(FILE_MAP[freq_list]) as f:
-            common_types = set([x.strip() for x in f.readlines()])
+        with open(FILE_MAP[freq_list]) as f_in:
+            common_types = set([x.strip() for x in f_in.readlines()])
 
 
     tokens = re_tokenize(text)
@@ -67,4 +65,5 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None, spellcheck=True):
         lemma = LOOKUP.get(token, token)
         if lemma not in common_types and (not spellcheck or wordnet.synsets(lemma)):
             advanced.add(lemma)
+
     return len(advanced)/math.sqrt(len(tokens))
