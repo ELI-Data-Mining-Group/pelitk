@@ -20,6 +20,7 @@ FILE_MAP = {
     'PELIC': resource_filename('lextools', 'data/wordlists/pelic_l3_2k.txt')
 }
 
+# lookup table created from NGSL and spaCy word lists
 LOOKUP = pickle.loads(pkgutil.get_data('lextools', 'data/lemmatizer.pkl'))
 def lemmatize(tokens):
     """ Lemmatize with lookup table and return list of corresponding lemmas """
