@@ -1,7 +1,7 @@
 [Home](README.md) > lextools
 ---
 
-# lextools
+# lex
 
 ### **re_tokenize(text)**
 
