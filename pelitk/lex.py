@@ -15,13 +15,13 @@ __version__ = '0.1'
 __author__ = 'ELI Data Mining Group'
 
 FILE_MAP = {
-    'NGSL': resource_filename('lextools', 'data/wordlists/ngsl_2k.txt'),
-    'PET': resource_filename('lextools', 'data/wordlists/pet_coca_2k.txt'),
-    'PELIC': resource_filename('lextools', 'data/wordlists/pelic_l3_2k.txt')
+    'NGSL': resource_filename('pelitk', 'data/wordlists/ngsl_2k.txt'),
+    'PET': resource_filename('pelitk', 'data/wordlists/pet_coca_2k.txt'),
+    'PELIC': resource_filename('pelitk', 'data/wordlists/pelic_l3_2k.txt')
 }
 
 # lookup table created from NGSL and spaCy word lists
-LOOKUP = pickle.loads(pkgutil.get_data('lextools', 'data/lemmatizer.pkl'))
+LOOKUP = pickle.loads(pkgutil.get_data('pelitk', 'data/lemmatizer.pkl'))
 def lemmatize(tokens):
     """ Lemmatize with lookup table and return list of corresponding lemmas """
     return [LOOKUP.get(x, x) for x in tokens]
