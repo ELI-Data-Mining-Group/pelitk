@@ -17,9 +17,15 @@ __author__ = 'ELI Data Mining Group'
 FILE_MAP = {
     'NGSL': resource_filename('pelitk', 'data/wordlists/ngsl_2k.txt'),
     'PET': resource_filename('pelitk', 'data/wordlists/pet_coca_2k.txt'),
-    'PELIC': resource_filename('pelitk', 'data/wordlists/pelic_l3_2k.txt')
+    'PELIC': resource_filename('pelitk', 'data/wordlists/pelic_l3_2k.txt'),
+    'NGSL_SUPP': resource_filename('pelitk', 'data/wordlists/ngsl_supplementary.txt')
 }
 
+
+def _load_wordlist(key):
+    with open(FILE_MAP[key]) as f_in:
+        wordlist = set([x.strip().lower() for x in f_in.readlines()])
+    return wordlist
 # lookup table created from NGSL and spaCy word lists
 LOOKUP = pickle.loads(pkgutil.get_data('pelitk', 'data/lemmatizer.pkl'))
 def lemmatize(tokens):
@@ -35,7 +41,7 @@ def re_tokenize(text):
     return re.findall(r"[A-Za-z]+", text.lower())
 
 
-def adv_guiraud(text, freq_list='NGSL', custom_list=None, spellcheck=True):
+def adv_guiraud(text, freq_list='NGSL', custom_list=None, spellcheck=True, supplementary=True):
     """
     Calculates advanced guiraud: advanced types / sqrt(number of tokens)
     By default, uses NGSL top 2k words as frequency list
@@ -52,9 +58,9 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None, spellcheck=True):
             raise KeyError \
                     ('Please specify an appropriate frequency list with' \
                     'custom_list or set freq_list to one of NGSL, PET, PELIC.')
-        with open(FILE_MAP[freq_list]) as f_in:
-            common_types = set([x.strip() for x in f_in.readlines()])
-
+        common_types = _load_wordlist(freq_list)
+    if supplementary:
+        common_types.union(_load_wordlist('NGSL_SUPP'))
     if isinstance(text, str):
         tokens = re_tokenize(text)
     else:
