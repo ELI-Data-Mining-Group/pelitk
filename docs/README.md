@@ -1,3 +1,5 @@
 # lextools Documentation
 
-- [lextools](LEXTOOLS.md)
+`pelitk`:
+- [`lex`](LEX.md)
+- [`grams`](GRAMS.md)

@@ -1,4 +1,4 @@
-[Home](README.md) > lextools
+[Home](README.md) > lex
 ---
 
 # lex
@@ -15,7 +15,7 @@ List of tokens from lowercased input, removing symbols and digits.
 
 ###### **Code**:
 ```python
-lextools.re_tokenize('Hi how are you?')
+lex.re_tokenize('Hi how are you?')
 
 ```
 
@@ -36,7 +36,7 @@ List of lemmas
 
 ###### **Code**:
 ```python
-lextools.lemmatize(['hi', 'how', 'are', 'you'])
+lex.lemmatize(['hi', 'how', 'are', 'you'])
 
 ```
 
@@ -61,7 +61,7 @@ Calculated AG lexical diversity index: `advanced types / sqrt(tokens)`
 #### **Example**:
 ###### **Code**:
 ```python
-lextools.adv_guiraud('Hi how are you doing today?')
+lex.adv_guiraud('Hi how are you doing today?')
 ```
 
 ###### **Output**
