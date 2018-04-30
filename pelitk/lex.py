@@ -60,7 +60,7 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None, spellcheck=True, suppl
                     'custom_list or set freq_list to one of NGSL, PET, PELIC.')
         common_types = _load_wordlist(freq_list)
     if supplementary:
-        common_types.union(_load_wordlist('SUPP'))
+        common_types = common_types.union(_load_wordlist('SUPP'))
     if isinstance(text, str):
         tokens = re_tokenize(text)
     else:
