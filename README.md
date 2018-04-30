@@ -1,7 +1,7 @@
 # Pitt English Language Institute toolkit (pelitk)
 
 ### Installation
-`pip install git+https://github.com/ELI-Data-Mining-Group/lextools.git@master`
+`pip install git+https://github.com/ELI-Data-Mining-Group/pelitk.git@master`
 ### Example Usage
 ```python
 >>> from pelitk import lex
