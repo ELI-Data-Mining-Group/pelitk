@@ -18,7 +18,7 @@ FILE_MAP = {
     'NGSL': resource_filename('pelitk', 'data/wordlists/ngsl_2k.txt'),
     'PET': resource_filename('pelitk', 'data/wordlists/pet_coca_2k.txt'),
     'PELIC': resource_filename('pelitk', 'data/wordlists/pelic_l3_2k.txt'),
-    'NGSL_SUPP': resource_filename('pelitk', 'data/wordlists/ngsl_supplementary.txt')
+    'SUPP': resource_filename('pelitk', 'data/wordlists/supplementary.txt')
 }
 
 
@@ -60,7 +60,7 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None, spellcheck=True, suppl
                     'custom_list or set freq_list to one of NGSL, PET, PELIC.')
         common_types = _load_wordlist(freq_list)
     if supplementary:
-        common_types.union(_load_wordlist('NGSL_SUPP'))
+        common_types.union(_load_wordlist('SUPP'))
     if isinstance(text, str):
         tokens = re_tokenize(text)
     else:
