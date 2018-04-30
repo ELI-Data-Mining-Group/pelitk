@@ -55,8 +55,11 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None, spellcheck=True):
         with open(FILE_MAP[freq_list]) as f_in:
             common_types = set([x.strip() for x in f_in.readlines()])
 
-
-    tokens = re_tokenize(text)
+    if isinstance(text, str):
+        tokens = re_tokenize(text)
+    else:
+        # already tokens?
+        tokens = text
 
     if len(tokens) == 0:
         return 0
