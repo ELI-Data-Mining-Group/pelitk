@@ -14,7 +14,7 @@ with open('LICENSE') as f:
 
 setup(
     name='pelitk',
-    version='0.1.0',
+    version='0.1.1',
     description='Package for processing text to measure lexical diversity.',
     long_description=readme,
     author='Daniel Zheng',
