@@ -23,7 +23,7 @@ setup(
     license=license,
     install_requires=['nltk'],
     packages=find_packages(exclude=('tests', 'docs')),
-    package_data={'lex': ['data/wordlists/*.txt', 'data/*.pkl']},
+    package_data={'pelitk': ['data/wordlists/*.txt', 'data/*.pkl']},
     include_package_data=True
 )
 
