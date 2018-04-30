@@ -27,7 +27,7 @@ AG:  0.8164965809277261
 - [x] re_tokenize
 - [x] lemmatize
 - [ ] concgrams
-- [ ] ngrams
+- [x] ngrams
 - [ ] concordance
 - [ ] skip gram
 - [ ] if putting on PyPi, switch to [RST README](https://gist.github.com/dupuy/1855764)
