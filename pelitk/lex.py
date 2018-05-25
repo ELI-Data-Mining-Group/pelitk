@@ -41,7 +41,8 @@ def re_tokenize(text):
     return re.findall(r"[A-Za-z]+", text.lower())
 
 
-def adv_guiraud(text, freq_list='NGSL', custom_list=None, spellcheck=True, supplementary=True):
+def adv_guiraud(text, freq_list='NGSL', custom_list=None,
+                spellcheck=True, supplementary=True):
     """
     Calculates advanced guiraud: advanced types / sqrt(number of tokens)
     By default, uses NGSL top 2k words as frequency list
@@ -77,3 +78,17 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None, spellcheck=True, suppl
             advanced.add(lemma)
 
     return len(advanced)/math.sqrt(len(tokens))
+
+def ttr(tokens):
+    """
+    Calculate Type-Token Ratio
+    """
+    return len(set(tokens))/len(tokens)
+
+def vocd(text, spellcheck=True, length_range=(35,50), num_subsamples=100,
+         min_value=0.01, max_value=200, precision=0.01, num_trials=3):
+    """
+    Calculate 'D' with voc-D method (approximation of HD-D)
+    """
+    tokens = [x for x in re_tokenize(text) if not spellcheck or wordnet.synsets(LOOKUP.get(x,x))]
+    print(tokens)
