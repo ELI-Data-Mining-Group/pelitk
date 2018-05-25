@@ -6,10 +6,12 @@ docs
 import pickle
 import re
 import math
+import random
 import pkgutil
 from pkg_resources import resource_filename
 from nltk.corpus import wordnet
-
+from scipy.optimize import curve_fit
+import numpy as np
 
 __version__ = '0.1'
 __author__ = 'ELI Data Mining Group'
@@ -85,10 +87,41 @@ def ttr(tokens):
     """
     return len(set(tokens))/len(tokens)
 
+def _estimate_d(N, TTR):
+    """
+    Finds value for D to fit to curve, minimizing squared error
+    """
+    popt, _ = curve_fit(_vocd_eq, N, TTR) # not using covariance so _
+    return popt[0]
+
+def _vocd_eq(N, D):
+    """
+    Equation for approximating TTR as function of N and D as described at
+    http://www.leeds.ac.uk/educol/documents/00001541.htm
+    """
+    return D/N * (np.sqrt(1 + 2*N/D)- 1)
+
+
 def vocd(text, spellcheck=True, length_range=(35,50), num_subsamples=100,
          min_value=0.01, max_value=200, precision=0.01, num_trials=3):
     """
     Calculate 'D' with voc-D method (approximation of HD-D)
     """
     tokens = [x for x in re_tokenize(text) if not spellcheck or wordnet.synsets(LOOKUP.get(x,x))]
-    print(tokens)
+
+    total_D = 0
+    for i in range(num_trials):
+        # calculate a D value each trial and average them all
+        ttr_list = []
+        n_list = []
+        for sample_size in range(length_range[0], length_range[1]+1):
+            total_ttr = 0
+            for j in range(num_subsamples):
+                total_ttr += ttr(random.sample(tokens, sample_size))
+            avg_ttr = total_ttr/num_subsamples
+            ttr_list.append(avg_ttr)
+            n_list.append(sample_size)
+        D = _estimate_d(np.array(n_list), np.array(ttr_list))
+        total_D += D
+    avg_D = total_D/num_trials
+    return avg_D
