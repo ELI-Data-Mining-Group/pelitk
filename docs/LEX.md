@@ -49,7 +49,7 @@ lex.lemmatize(['hi', 'how', 'are', 'you'])
 ### **adv_guiraud(text, freq_list='NGSL', custom_list=None, spellcheck=True)**
 
 #### **Parameters**:
-  - `text`: Input string | Example: `'Hi how are you?''`
+  - `text`: Input string | Example: `'Hi how are you doing today?'`
   - `freq_list` (optional, defaults to `'NGSL'`): Specify list of 2K common types to use for AG. Options include `'NGSL', 'PET', 'PELIC'`. | Example: `'PET'`
   - `custom_list` (optional, defaults to `None`): Specify a custom list of common types to use for AG as a list of lemmas. | Example: `['the', 'be', .....]`
   - `spellcheck` (optional, defaults to `True`): Specify whether or not advanced types should be spell-checked using `wordnet.synsets()`. | Example: `False`
