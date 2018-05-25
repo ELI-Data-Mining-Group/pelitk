@@ -68,3 +68,27 @@ lex.adv_guiraud('Hi how are you doing today?')
 ```python
 0.4082482904638631
 ```
+
+### **vocd(text, spellcheck=True, length_range=(35,50), num_subsamples=100, num_trials=3)**
+
+#### **Parameters**:
+  - `text`: Input string | Example: `Hi how are you?`
+  - `spellcheck` (optional, defaults to `True`): Specify whether or not advanced types should be spell-checked using `wordnet.synsets()`. | Example: `False`
+  - `length_rage` (optional, defaults to (35, 50)): A tuple with the lower and upper bounds of random sample size for vocd
+  - `num_subsamples` (optional, defaults to 100): A positive integer specifying how many times to randomly sample the text
+  - `num_trials` (optional, defaults to 3): Number of times to average D estimate over
+
+#### **Returns**:
+Estimated "D" parameter for the voc-D lexical diversity index
+
+#### **Example**:
+###### **Code**:
+```python
+text = 'Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do: once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it, “ and what is the use of a book,” thought Alice, “ without pictures or conversations ?” So she was considering in her own mind, (as well as she could, for the hot day made her feel very sleepy and stupid,) whether the pleasure of making a daisy-chain would be worth the trouble of getting up and picking the daisies, when suddenly a white rabbit with pink eyes ran close by her.'
+lex.vocd(text, spellcheck=False)
+```
+
+###### **Output**
+```python
+83.757961976435737
+```
