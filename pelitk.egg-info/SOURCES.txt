@@ -1,9 +1,0 @@
-README.md
-pelitk/__init__.py
-pelitk/grams.py
-pelitk/lex.py
-pelitk.egg-info/PKG-INFO
-pelitk.egg-info/SOURCES.txt
-pelitk.egg-info/dependency_links.txt
-pelitk.egg-info/requires.txt
-pelitk.egg-info/top_level.txt
