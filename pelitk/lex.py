@@ -91,7 +91,8 @@ def _estimate_d(N, TTR):
     """
     Finds value for D to fit to curve, minimizing squared error
     """
-    popt, _ = curve_fit(_vocd_eq, N, TTR) # not using covariance so _
+    # initial guess of 100 for D
+    popt, _ = curve_fit(_vocd_eq, N, TTR, p0=[100])
     return popt[0]
 
 def _vocd_eq(N, D):
@@ -105,9 +106,11 @@ def _vocd_eq(N, D):
 def vocd(text, spellcheck=True, length_range=(35,50), num_subsamples=100, num_trials=3):
     """
     Calculate 'D' with voc-D method (approximation of HD-D)
+    Inspired by https://metacpan.org/pod/release/AXANTHOS/Lingua-Diversity-0.07/lib/Lingua/Diversity/VOCD.pm
     """
-    tokens = [x for x in re_tokenize(text) if not spellcheck or wordnet.synsets(LOOKUP.get(x,x))]
-
+    tokens = [x for x in re_tokenize(text) if not spellcheck or wordnet.synsets(LOOKUP.get(x, x))]
+    if len(tokens) < length_range[1]:
+        raise ValueError('Sample size greater than population!. Either reduce the bounds of length_range or try a different text.')
     total_D = 0
     for i in range(num_trials):
         # calculate a D value each trial and average them all
