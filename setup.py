@@ -21,7 +21,7 @@ setup(
     author_email='daniel.zheng@pitt.edu',
     url='https://github.com/ELI-Data-Mining-Group/pelitk',
     license=license,
-    install_requires=['nltk'],
+    install_requires=['nltk', 'scipy', 'numpy'],
     packages=find_packages(exclude=('tests', 'docs')),
     package_data={'pelitk': ['data/wordlists/*.txt', 'data/*.pkl']},
     include_package_data=True
