@@ -102,8 +102,7 @@ def _vocd_eq(N, D):
     return D/N * (np.sqrt(1 + 2*N/D)- 1)
 
 
-def vocd(text, spellcheck=True, length_range=(35,50), num_subsamples=100,
-         min_value=0.01, max_value=200, precision=0.01, num_trials=3):
+def vocd(text, spellcheck=True, length_range=(35,50), num_subsamples=100, num_trials=3):
     """
     Calculate 'D' with voc-D method (approximation of HD-D)
     """
