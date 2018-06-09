@@ -21,7 +21,7 @@ AG:  0.8164965809277261
 ### To-Do:
 - [ ] MTLD
 - [ ] HDD
-- [ ] vocD?
+- [x] vocD?
 - [x] AG
   - [x] NGSL, PSL3, PET, Custom
 - [x] re_tokenize
