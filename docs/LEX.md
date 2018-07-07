@@ -45,6 +45,26 @@ lex.lemmatize(['hi', 'how', 'are', 'you'])
 ['hello', 'how', 'be', 'you']
 ```
 
+### **ttr(tokens)**
+Calculate Type-Token ratio on a list of tokens. 
+
+#### **Parameters**:
+  - `tokens`: List of tokens | Example: `['words', 'should', 'go', 'here', 'more', 'words']`
+
+#### **Returns**:
+Type-Token Ratio
+
+#### **Example**:
+
+###### **Code**:
+```python
+lex.ttr(['words', 'should', 'go', 'here', 'more', 'words'])
+```
+
+###### **Output**
+```python
+0.8333333333333334
+```
 
 ### **adv_guiraud(text, freq_list='NGSL', custom_list=None, spellcheck=True)**
 
