@@ -19,7 +19,7 @@ AG:  0.8164965809277261
 
 
 ### To-Do:
-- [ ] MTLD
+- [x] MTLD
 - [ ] HDD
 - [x] vocD?
 - [x] AG
