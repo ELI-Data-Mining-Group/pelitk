@@ -1,13 +1,5 @@
-'''
-Python module
-
-'''
-
-
-
 __version__ = '0.1'
 __author__ = 'ELI Data Mining Group'
-
 
 
 def ngrams(tokens, n=1):
@@ -21,6 +13,7 @@ def ngrams(tokens, n=1):
     for i in range(0, len(tokens)-n):
         ngrams.append(ngrams[i][1:] + [tokens[i+n]])
     return ngrams
+
 
 def skip_grams(tokens, n=2, skip=1):
     if skip >= n:
