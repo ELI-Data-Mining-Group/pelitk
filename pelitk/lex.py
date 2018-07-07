@@ -132,11 +132,11 @@ def ttr(tokens):
     return len(set(tokens))/len(tokens)
 
 
-def mtld(text, factor_size=0.72):
+def mtld(text, spellcheck=False, factor_size=0.72):
     """
     Implements the Measure of Textual Lexical Diversity (MTLD)
     """
-    tokens = re_tokenize(text)
+    tokens = [x for x in re_tokenize(text) if not spellcheck or wordnet.synsets(LOOKUP.get(x, x))]
     forward_factor_count = _mtld_pass(tokens, factor_size)
     backward_factor_count = _mtld_pass(tokens[::-1], factor_size)
     mtld = (len(tokens)/forward_factor_count + len(tokens)/backward_factor_count)/2
