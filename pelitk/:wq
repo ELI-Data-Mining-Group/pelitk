@@ -96,7 +96,7 @@ def _vocd_eq(N, D):
     return D/N * (np.sqrt(1 + 2*N/D) - 1)
 
 
-def vocd(text, spellcheck=False, length_range=(35, 50), num_subsamples=100, num_trials=3):
+def vocd(text, spellcheck=True, length_range=(35, 50), num_subsamples=100, num_trials=3):
     """
     Calculate 'D' with voc-D method (approximation of HD-D)
     Inspired by
@@ -151,13 +151,9 @@ def _mtld_pass(tokens, factor_size):
     factor_count = 0
     for i in range(1, len(tokens)+1):
         this_slice = tokens[current_idx:i]
-        this_ttr = ttr(this_slice)
-        if this_ttr < factor_size:
+        if ttr(this_slice) < factor_size:
             factor_count += 1
             current_idx = i
-    # account for remainder factor count
-    if this_ttr > factor_size:
-        factor_count += (1.0 - this_ttr)/(1.0 - factor_size)
     return factor_count
 
 
