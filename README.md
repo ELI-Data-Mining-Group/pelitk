@@ -1,4 +1,4 @@
-# Pitt English Language Institute toolkit (pelitk)
+# PELITK: Pitt English Language Institute ToolKit
 
 ### Installation
 `pip install git+https://github.com/ELI-Data-Mining-Group/pelitk.git@master`
