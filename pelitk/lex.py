@@ -139,6 +139,10 @@ def mtld(text, spellcheck=False, factor_size=0.72):
     tokens = [x for x in re_tokenize(text) if not spellcheck or wordnet.synsets(LOOKUP.get(x, x))]
     forward_factor_count = _mtld_pass(tokens, factor_size)
     backward_factor_count = _mtld_pass(tokens[::-1], factor_size)
+    if forward_factor_count == 0 or backward_factor_count == 0:
+        raise ValueError("""Text ttr never fell below the specified
+                            factor_size. Try increasing factor_size parameter
+                            or using input with more repeated tokens. """)
     mtld = (len(tokens)/forward_factor_count + len(tokens)/backward_factor_count)/2
     return mtld
 
@@ -161,5 +165,12 @@ def _mtld_pass(tokens, factor_size):
     return factor_count
 
 
-def maas(text):
-    pass
+def maas(text, spellcheck=False):
+    """
+    Compute the a^2 Maas index.
+    """
+    tokens = [x for x in re_tokenize(text) if not spellcheck or wordnet.synsets(LOOKUP.get(x, x))]
+    num_tokens = len(tokens)
+    num_types = len(set(tokens))
+    a_squared = math.log(num_tokens) - math.log(num_types) / math.log(num_tokens)**2
+    return a_squared
