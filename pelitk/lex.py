@@ -29,14 +29,25 @@ def _load_wordlist(key):
 
 
 def lemmatize(tokens):
-    """ Lemmatize with lookup table and return list of corresponding lemmas """
+    """
+    Lemmatize with lookup table and return list of corresponding lemmas
+
+    Args:
+        tokens: A list of token strings
+    Returns:
+        List of lemmas in same order
+    """
     return [LOOKUP.get(x, x) for x in tokens]
 
 
 def re_tokenize(text):
     """
-    Returns a list of tokens from input text
-    Lowercase input, removing symbols and digits.
+    Regular expression tokenizer. Lowercases input and removes symbols/digits.
+
+    Args:
+        text: An input string
+    Returns:
+        List of tokens found in input string
     """
     return re.findall(r"[A-Za-z]+", text.lower())
 
@@ -47,6 +58,19 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None,
     Calculates advanced guiraud: advanced types / sqrt(number of tokens)
     By default, uses NGSL top 2k words as frequency list
     custom_list is a custom list of common types for frequency list
+
+    Args:
+        text: Input string to calculate AG for
+        freq_list: string specifying which freq list to use. Must be one
+                   of {'NGSL', 'PET', 'PELIC', 'SUPP'}
+        custom_list: if not None, used instead of freq_list (can pass own list
+                     of strings containing common types to ignore for AG
+        spellcheck: Boolean flag to ignore misspelled words (rough spellcheck with
+                    wordnet.synsets())
+        supplementary: Include NGSL supplementary vocabulary in addition to
+                       specified list
+    Returns:
+        Calculated AG
     """
 
     if custom_list is not None:
@@ -59,6 +83,7 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None,
                               custom_list or set freq_list to one of NGSL, PET,
                               PELIC.""")
         common_types = _load_wordlist(freq_list)
+    # Include supplementary
     if supplementary:
         common_types = common_types.union(_load_wordlist('SUPP'))
     if isinstance(text, str):
@@ -73,10 +98,11 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None,
     advanced = set()
     for token in tokens:
         lemma = LOOKUP.get(token, token)
-        if lemma not in common_types and (not spellcheck or wordnet.synsets(lemma)):
+        if lemma not in common_types and (
+                not spellcheck or wordnet.synsets(lemma)):
             advanced.add(lemma)
 
-    return len(advanced)/math.sqrt(len(tokens))
+    return len(advanced) / math.sqrt(len(tokens))
 
 
 def _estimate_d(N, TTR):
@@ -93,16 +119,21 @@ def _vocd_eq(N, D):
     Equation for approximating TTR as function of N and D as described at
     http://www.leeds.ac.uk/educol/documents/00001541.htm
     """
-    return D/N * (np.sqrt(1 + 2*N/D) - 1)
+    return D / N * (np.sqrt(1 + 2 * N / D) - 1)
 
 
-def vocd(text, spellcheck=False, length_range=(35, 50), num_subsamples=100, num_trials=3):
+def vocd(text, spellcheck=False, length_range=(35, 50),
+         num_subsamples=100, num_trials=3):
     """
     Calculate 'D' with voc-D method (approximation of HD-D)
     Inspired by
     https://metacpan.org/pod/release/AXANTHOS/Lingua-Diversity-0.07/lib/Lingua/Diversity/VOCD.pm
+
+    Args: 
+        text:   
     """
-    tokens = [x for x in re_tokenize(text) if not spellcheck or wordnet.synsets(LOOKUP.get(x, x))]
+    tokens = [x for x in re_tokenize(
+        text) if not spellcheck or wordnet.synsets(LOOKUP.get(x, x))]
     if len(tokens) < length_range[1]:
         raise ValueError("""Sample size greater than population!. Either reduce
                             the bounds of length_range or try a different
@@ -112,16 +143,16 @@ def vocd(text, spellcheck=False, length_range=(35, 50), num_subsamples=100, num_
         # calculate a D value each trial and average them all
         ttr_list = []
         n_list = []
-        for sample_size in range(length_range[0], length_range[1]+1):
+        for sample_size in range(length_range[0], length_range[1] + 1):
             total_ttr = 0
             for j in range(num_subsamples):
                 total_ttr += ttr(random.sample(tokens, sample_size))
-            avg_ttr = total_ttr/num_subsamples
+            avg_ttr = total_ttr / num_subsamples
             ttr_list.append(avg_ttr)
             n_list.append(sample_size)
         D = _estimate_d(np.array(n_list), np.array(ttr_list))
         total_d += D
-    avg_d = total_d/num_trials
+    avg_d = total_d / num_trials
     return avg_d
 
 
@@ -129,21 +160,23 @@ def ttr(tokens):
     """
     Calculate Type-Token Ratio
     """
-    return len(set(tokens))/len(tokens)
+    return len(set(tokens)) / len(tokens)
 
 
 def mtld(text, spellcheck=False, factor_size=0.72):
     """
     Implements the Measure of Textual Lexical Diversity (MTLD)
     """
-    tokens = [x for x in re_tokenize(text) if not spellcheck or wordnet.synsets(LOOKUP.get(x, x))]
+    tokens = [x for x in re_tokenize(
+        text) if not spellcheck or wordnet.synsets(LOOKUP.get(x, x))]
     forward_factor_count = _mtld_pass(tokens, factor_size)
     backward_factor_count = _mtld_pass(tokens[::-1], factor_size)
     if forward_factor_count == 0 or backward_factor_count == 0:
         raise ValueError("""Text ttr never fell below the specified
                             factor_size. Try increasing factor_size parameter
                             or using input with more repeated tokens. """)
-    mtld = (len(tokens)/forward_factor_count + len(tokens)/backward_factor_count)/2
+    mtld = (len(tokens) / forward_factor_count +
+            len(tokens) / backward_factor_count) / 2
     return mtld
 
 
@@ -153,7 +186,7 @@ def _mtld_pass(tokens, factor_size):
     """
     current_idx = 0
     factor_count = 0
-    for i in range(1, len(tokens)+1):
+    for i in range(1, len(tokens) + 1):
         this_slice = tokens[current_idx:i]
         this_ttr = ttr(this_slice)
         if this_ttr < factor_size:
@@ -161,7 +194,7 @@ def _mtld_pass(tokens, factor_size):
             current_idx = i
     # account for remainder factor count
     if this_ttr > factor_size:
-        factor_count += (1.0 - this_ttr)/(1.0 - factor_size)
+        factor_count += (1.0 - this_ttr) / (1.0 - factor_size)
     return factor_count
 
 
@@ -169,8 +202,10 @@ def maas(text, spellcheck=False):
     """
     Compute the a^2 Maas index.
     """
-    tokens = [x for x in re_tokenize(text) if not spellcheck or wordnet.synsets(LOOKUP.get(x, x))]
+    tokens = [x for x in re_tokenize(
+        text) if not spellcheck or wordnet.synsets(LOOKUP.get(x, x))]
     num_tokens = len(tokens)
     num_types = len(set(tokens))
-    a_squared = math.log(num_tokens) - math.log(num_types) / math.log(num_tokens)**2
+    a_squared = math.log(num_tokens) - \
+        math.log(num_types) / math.log(num_tokens)**2
     return a_squared
