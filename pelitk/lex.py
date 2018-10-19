@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import pickle
 import re
 import math
@@ -10,7 +11,7 @@ from scipy.optimize import curve_fit
 import numpy as np
 
 __version__ = '0.1'
-__author__ = 'ELI Data Mining Group'
+__author__ = 'Pitt ELI Data Mining Group'
 
 FILE_MAP = {
     'NGSL': resource_filename('pelitk', 'data/wordlists/ngsl_2k.txt'),
@@ -65,8 +66,8 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None,
                    of {'NGSL', 'PET', 'PELIC', 'SUPP'}
         custom_list: if not None, used instead of freq_list (can pass own list
                      of strings containing common types to ignore for AG
-        spellcheck: Boolean flag to ignore misspelled words (rough spellcheck with
-                    wordnet.synsets())
+        spellcheck: Boolean flag to ignore misspelled words (rough spellcheck
+                    with wordnet.synsets())
         supplementary: Include NGSL supplementary vocabulary in addition to
                        specified list
     Returns:
@@ -129,8 +130,8 @@ def vocd(text, spellcheck=False, length_range=(35, 50),
     Inspired by
     https://metacpan.org/pod/release/AXANTHOS/Lingua-Diversity-0.07/lib/Lingua/Diversity/VOCD.pm
 
-    Args: 
-        text:   
+    Args:
+        text:
     """
     tokens = [x for x in re_tokenize(
         text) if not spellcheck or wordnet.synsets(LOOKUP.get(x, x))]
