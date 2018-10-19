@@ -1,5 +1,5 @@
 # PELITK: Pitt English Language Institute ToolKit
-
+This python package contains implementations of various lexical sophistication measures (vocD, MTLD, Advanced Guiraud, etc) that are useful for SLA work.
 ### Installation
 `pip install git+https://github.com/ELI-Data-Mining-Group/pelitk.git@master`
 ### Example Usage
