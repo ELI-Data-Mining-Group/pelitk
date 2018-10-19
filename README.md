@@ -5,8 +5,8 @@ This python package contains implementations of various lexical sophistication m
 ### Example Usage
 ```python
 >>> from pelitk import lex
->>> print('AG: ', lex.adv_guiraud('hi this is a test string'))
-AG:  0.8164965809277261
+>>> print('AG:', lex.adv_guiraud('hi this is a test string'))
+AG: 0.8164965809277261
 >>> tokens = lex.re_tokenize('hi this is a test string')
 >>> print(tokens)
 ['hi', 'this', 'is', 'a', 'test', 'string']
