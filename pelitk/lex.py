@@ -89,10 +89,10 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None,
     # Include supplementary
     if supplementary:
         common_types = common_types.union(_load_wordlist('SUPP'))
-    if spellcheck:
-        common_types = common_types.union(_load_wordlist('ENABLE1'))
-        common_types.add('i')
-        common_types.add('a')
+
+    dictionary = _load_wordlist('ENABLE1')
+    dictionary.add('i')
+    dictionary.add('a')
 
     if isinstance(text, str):
         tokens = re_tokenize(text)
@@ -114,7 +114,11 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None,
                 else:
                     lemma = token
                 if lemma not in common_types:
-                    advanced.add(lemma)
+                    if spellcheck:
+                        if lemma in dictionary:
+                            advanced.add(lemma)
+                    else:
+                        advanced.add(lemma)
 
             res.append(len(advanced) / math.sqrt(len(toks)))
         return res
@@ -126,7 +130,11 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None,
             else:
                 lemma = token
             if lemma not in common_types:
-                advanced.add(lemma)
+                if spellcheck:
+                    if lemma in dictionary:
+                        advanced.add(lemma)
+                else:
+                    advanced.add(lemma)
 
         return len(advanced) / math.sqrt(len(tokens))
 
