@@ -69,7 +69,7 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None,
         custom_list: if not None, used instead of freq_list (can pass own list
                      of strings containing common types to ignore for AG
         spellcheck: Boolean flag to ignore misspelled words (rough spellcheck
-                    with wordnet.synsets())
+                    with enable1 + 'i' + 'a')
         supplementary: Include NGSL supplementary vocabulary in addition to
                        specified list
     Returns:
@@ -91,6 +91,9 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None,
         common_types = common_types.union(_load_wordlist('SUPP'))
     if spellcheck:
         common_types = common_types.union(_load_wordlist('ENABLE1'))
+        common_types.add('i')
+        common_types.add('a')
+
     if isinstance(text, str):
         tokens = re_tokenize(text)
     else:
@@ -100,16 +103,34 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None,
     if len(tokens) == 0:
         return 0
 
-    advanced = set()
-    for token in tokens:
-        if not lemmas:
-            lemma = LOOKUP.get(token, token)
-        else:
-            lemma = token
-        if lemma not in common_types:
-            advanced.add(lemma)
+    if isinstance(tokens[0], list):
+        res = []
+        # tokens is a list of lists of tokens
+        for toks in tokens:
+            advanced = set()
+            for token in toks:
+                if not lemmas:
+                    lemma = LOOKUP.get(token, token)
+                else:
+                    lemma = token
+                if lemma not in common_types:
+                    advanced.add(lemma)
 
-    return len(advanced) / math.sqrt(len(tokens))
+            res.append(len(advanced) / math.sqrt(len(toks)))
+        return res
+    else:
+        advanced = set()
+        for token in tokens:
+            if not lemmas:
+                lemma = LOOKUP.get(token, token)
+            else:
+                lemma = token
+            if lemma not in common_types:
+                advanced.add(lemma)
+
+        return len(advanced) / math.sqrt(len(tokens))
+
+
 
 
 def _estimate_d(N, TTR):
