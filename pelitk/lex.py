@@ -16,9 +16,10 @@ __author__ = 'Pitt ELI Data Mining Group'
 FILE_MAP = {
     'NGSL': resource_filename('pelitk', 'data/wordlists/ngsl_2k.txt'),
     'PVL': resource_filename('pelitk', 'data/wordlists/pet_coca_2k.txt'),
-    'PSL3': resource_filename('pelitk', 'data/wordlists/pelic_l3_2k.txt'),
-    'PSL3_train': resource_filename('pelitk', 'data/wordlists/psl3_2k_train.txt'),
-    'SUPP': resource_filename('pelitk', 'data/wordlists/supplementary.txt')
+    'PSL3_EDM': resource_filename('pelitk', 'data/wordlists/psl3_2k_edm.txt'),
+    'PSL3_IJLCR': resource_filename('pelitk', 'data/wordlists/psl3_2k_ijlcr.txt'),
+    'SUPP': resource_filename('pelitk', 'data/wordlists/supplementary.txt'),
+    'ENABLE1': resource_filename('pelitk', 'data/wordlists/enable1.txt')
 }
 # lookup table created from NGSL and spaCy word lists
 LOOKUP = pickle.loads(pkgutil.get_data('pelitk', 'data/lemmatizer.pkl'))
@@ -83,11 +84,13 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None,
         if freq_list not in FILE_MAP:
             raise KeyError("""Please specify an appropriate frequency list with
                               custom_list or set freq_list to one of NGSL, PET,
-                              PELIC.""")
+                              PSL3_EDM, PSL3_IJLCR.""")
         common_types = _load_wordlist(freq_list)
     # Include supplementary
     if supplementary:
         common_types = common_types.union(_load_wordlist('SUPP'))
+    if spellcheck:
+        common_types = common_types.union(_load_wordlist('ENABLE1'))
     if isinstance(text, str):
         tokens = re_tokenize(text)
     else:
@@ -100,8 +103,7 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None,
     advanced = set()
     for token in tokens:
         lemma = LOOKUP.get(token, token)
-        if lemma not in common_types and (
-                not spellcheck or wordnet.synsets(lemma)):
+        if lemma not in common_types:
             advanced.add(lemma)
 
     return len(advanced) / math.sqrt(len(tokens))
