@@ -56,7 +56,7 @@ def re_tokenize(text):
 
 
 def adv_guiraud(text, freq_list='NGSL', custom_list=None,
-                spellcheck=True, supplementary=True):
+                spellcheck=True, supplementary=True, lemmas=False):
     """
     Calculates advanced guiraud: advanced types / sqrt(number of tokens)
     By default, uses NGSL top 2k words as frequency list
@@ -102,7 +102,10 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None,
 
     advanced = set()
     for token in tokens:
-        lemma = LOOKUP.get(token, token)
+        if not lemmas:
+            lemma = LOOKUP.get(token, token)
+        else:
+            lemma = token
         if lemma not in common_types:
             advanced.add(lemma)
 
