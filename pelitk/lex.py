@@ -15,8 +15,9 @@ __author__ = 'Pitt ELI Data Mining Group'
 
 FILE_MAP = {
     'NGSL': resource_filename('pelitk', 'data/wordlists/ngsl_2k.txt'),
-    'PET': resource_filename('pelitk', 'data/wordlists/pet_coca_2k.txt'),
-    'PELIC': resource_filename('pelitk', 'data/wordlists/pelic_l3_2k.txt'),
+    'PVL': resource_filename('pelitk', 'data/wordlists/pet_coca_2k.txt'),
+    'PSL3': resource_filename('pelitk', 'data/wordlists/pelic_l3_2k.txt'),
+    'PSL3_train': resource_filename('pelitk', 'data/wordlists/psl3_2k_train.txt'),
     'SUPP': resource_filename('pelitk', 'data/wordlists/supplementary.txt')
 }
 # lookup table created from NGSL and spaCy word lists
