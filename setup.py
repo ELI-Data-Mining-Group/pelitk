@@ -4,6 +4,8 @@ from setuptools import setup, find_packages
 import sys
 from os import path
 
+import nltk
+
 here = path.abspath(path.dirname(__file__))
 
 with open('README.md') as f:
@@ -27,6 +29,5 @@ setup(
     include_package_data=True
 )
 
-import nltk
 if 'install' in sys.argv:
     nltk.download('wordnet')
