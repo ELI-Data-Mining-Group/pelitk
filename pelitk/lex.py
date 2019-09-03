@@ -22,7 +22,7 @@ FILE_MAP = {
     'ENABLE1': resource_filename('pelitk', 'data/wordlists/enable1.txt'),
     'OVERLAP': resource_filename('pelitk', 'data/wordlists/overlap.txt'),
     'PSL3_ONLY': resource_filename('pelitk', 'data/wordlists/psl3_only.txt'),
-    'PVL_ONLY:' resource_filename('pelitk', 'data/wordlists/pvl_only.txt')
+    'PVL_ONLY': resource_filename('pelitk', 'data/wordlists/pvl_only.txt')
 }
 # lookup table created from NGSL and spaCy word lists
 LOOKUP = pickle.loads(pkgutil.get_data('pelitk', 'data/lemmatizer.pkl'))
