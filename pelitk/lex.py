@@ -20,6 +20,7 @@ FILE_MAP = {
     'PSL3_IJLCR': resource_filename('pelitk', 'data/wordlists/psl3_2k_ijlcr.txt'),
     'SUPP': resource_filename('pelitk', 'data/wordlists/supplementary.txt'),
     'ENABLE1': resource_filename('pelitk', 'data/wordlists/enable1.txt')
+    'OVERLAP': resource_filename('pelitk', 'data/wordlists/overlap.txt')
 }
 # lookup table created from NGSL and spaCy word lists
 LOOKUP = pickle.loads(pkgutil.get_data('pelitk', 'data/lemmatizer.pkl'))
