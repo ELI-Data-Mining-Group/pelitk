@@ -16,16 +16,16 @@ with open('LICENSE') as f:
 
 setup(
     name='pelitk',
-    version='0.1.4',
-    description='Package for processing text, especially texts in PELIC',
+    version='0.1.3',
+    description='Package for processing text to measure lexical diversity.',
     long_description=readme,
-    authors='Daniel Zheng, Na-Rae Han, Ben Naismith',
-    author_email='naraehan@pitt.edu',
+    author='Daniel Zheng',
+    author_email='daniel.zheng@pitt.edu',
     url='https://github.com/ELI-Data-Mining-Group/pelitk',
     license=license,
     install_requires=['nltk', 'scipy', 'numpy'],
-    packages=find_packages(),
-    package_data={'pelitk': ['lextools/wordlists/*.txt']},
+    packages=find_packages(exclude=('tests', 'docs')),
+    package_data={'pelitk': ['data/wordlists/*.txt', 'data/*.pkl']},
     include_package_data=True
 )
 
