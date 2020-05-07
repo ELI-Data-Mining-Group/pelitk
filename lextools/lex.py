@@ -14,33 +14,11 @@ __version__ = '0.1'
 __author__ = 'Pitt ELI Data Mining Group'
 
 FILE_MAP = {
-    'NGSL': resource_filename('pelitk', 'data/wordlists/ngsl_2k.txt'),
-    'PVL': resource_filename('pelitk', 'data/wordlists/pet_coca_2k.txt'),
-    'PSL3': resource_filename('pelitk', 'data/wordlists/psl3.txt'),
-    'ENABLE1': resource_filename('pelitk', 'data/wordlists/enable1.txt'),
+    'NGSL': resource_filename('pelitk', 'lextools/wordlists/ngsl_2k.txt'),
+    'PVL': resource_filename('pelitk', 'lextools/wordlists/pet_coca_2k.txt'),
+    'PSL3': resource_filename('pelitk', 'lextools/wordlists/psl3.txt'),
+    'ENABLE1': resource_filename('pelitk', 'lextools/wordlists/enable1.txt'),
 }
-
-# lookup table created from NGSL and spaCy word lists
-LOOKUP = pickle.loads(pkgutil.get_data('pelitk', 'data/lemmatizer.pkl'))
-
-
-def _load_wordlist(key):
-    with open(FILE_MAP[key]) as f_in:
-        wordlist = set([x.strip().lower() for x in f_in.readlines()])
-    return wordlist
-
-
-def lemmatize(tokens):
-    """
-    Lemmatize with lookup table and return list of corresponding lemmas
-
-    Args:
-        tokens: A list of token strings
-    Returns:
-        List of lemmas in same order
-    """
-    return [LOOKUP.get(x, x) for x in tokens]
-
 
 def re_tokenize(text):
     """
