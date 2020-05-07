@@ -24,8 +24,8 @@ setup(
     url='https://github.com/ELI-Data-Mining-Group/pelitk',
     license=license,
     install_requires=['nltk', 'scipy', 'numpy'],
-    packages=find_packages(exclude=('tests', 'docs')),
-    package_data={'pelitk': ['lextools/wordlists/*.txt', 'lextools*.pkl']},
+    packages=find_packages(),
+    package_data={'pelitk': ['lextools/wordlists/*.txt']},
     include_package_data=True
 )
 

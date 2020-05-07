@@ -1,3 +1,0 @@
-nltk
-scipy
-numpy
