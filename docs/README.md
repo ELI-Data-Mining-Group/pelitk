@@ -2,4 +2,4 @@
 
 `pelitk`:
 - [`lex`](LEX.md)
-- [`grams`](GRAMS.md)
+- [`conc`]CONC.md)

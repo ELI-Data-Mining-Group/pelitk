@@ -25,7 +25,7 @@ Concordance list for the specified node word
 ###### **Code**:
 ```python
 tok_text = ['The', 'key', 'word', 'in', 'this', 'text', 'is', 'the', 'noun', 'platypus', '.', 'I', 'want', 'to', 'see', 'the', 'cotext', 'every', 'time', 'the', 'word', 'platypus', 'occurs', '.']
-concordance(tok_text,'platypus',5)
+conc.concordance(tok_text,'platypus',5)
 ```
 
 ###### **Output**
@@ -38,7 +38,7 @@ concordance(tok_text,'platypus',5)
 
 ###### **Code**:
 ```python
-concordance(tok_text,'platypus',5,pretty=True)
+conc.concordance(tok_text,'platypus',5,pretty=True)
 ```
 
 ###### **Output**
@@ -52,7 +52,7 @@ concordance(tok_text,'platypus',5,pretty=True)
 ###### **Code**:
 ```python
 tokPOS_text = [('The', 'DT'), ('key', 'JJ'), ('word', 'NN'), ('in', 'IN'), ('this', 'DT'), ('text', 'NN'), ('is', 'VBZ'), ('the', 'DT'), ('noun', 'JJ'), ('platypus', 'NN'), ('.', '.'), ('I', 'PRP'), ('want', 'VBP'), ('to', 'TO'), ('see', 'VB'), ('the', 'DT'), ('cotext', 'NN'), ('every', 'DT'), ('time', 'NN'), ('the', 'DT'), ('word', 'NN'), ('platypus', 'NN'), ('occurs', 'VBZ'), ('.', '.')]
-concordance(tokPOS_text,'platypus',5,pos=True,pretty=False)
+conc.concordance(tokPOS_text,'platypus',5,pos=True,pretty=False)
 ```
 
 ###### **Output**
@@ -66,7 +66,7 @@ concordance(tokPOS_text,'platypus',5,pos=True,pretty=False)
 
 ###### **Code**:
 ```python
-concordance(tokPOS_text,'platypus',5,pos=True,pretty=True)
+conc.concordance(tokPOS_text,'platypus',5,pos=True,pretty=True)
 ```
 
 ###### **Output**
@@ -79,7 +79,7 @@ concordance(tokPOS_text,'platypus',5,pos=True,pretty=True)
 ### **Printing concordances**
 Print concordance output `(pretty=True)` to a csv file.
 ```python
-to_print = concordance(tok_text,'platypus',5,pretty=True)
+to_print = conc.concordance(tok_text,'platypus',5,pretty=True)
 
 with open('concordance.csv', 'w', ) as myfile:
     wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
