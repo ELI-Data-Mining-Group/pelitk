@@ -16,7 +16,8 @@ __author__ = 'Pitt ELI Data Mining Group'
 FILE_MAP = {
     'NGSL': resource_filename('pelitk', 'data/wordlists/ngsl_2k.txt'),
     'PSL3': resource_filename('pelitk', 'data/wordlists/psl3.txt'),
-    'ENABLE1': resource_filename('pelitk', 'data/wordlists/enable1.txt'),
+    'ENABLE1': resource_filename('pelitk', 'data/wordlists/enable1.txt',
+    'SUPP': resource_filename('pelitk', 'data/wordlists/supplementary.txt)                                ),
 }
 # lookup table created from NGSL and spaCy word lists
 LOOKUP = pickle.loads(pkgutil.get_data('pelitk', 'data/lemmatizer.pkl'))
@@ -50,7 +51,7 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None,
     Args:
         text: Input string to calculate AG for
         freq_list: string specifying which freq list to use. Must be one
-                   of {'NGSL', 'PET', 'PELIC', 'SUPP'}
+                   of {'NGSL','PELIC', 'SUPP'}
         custom_list: if not None, used instead of freq_list (can pass own list
                      of strings containing common types to ignore for AG
         spellcheck: Boolean flag to ignore misspelled words (rough spellcheck
@@ -68,8 +69,8 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None,
     else:
         if freq_list not in FILE_MAP:
             raise KeyError("""Please specify an appropriate frequency list with
-                              custom_list or set freq_list to one of NGSL, PET,
-                              PSL3_EDM, PSL3_IJLCR.""")
+                              custom_list or set freq_list to one of NGSL, PSL, 
+                              SUPP.""")
         common_types = _load_wordlist(freq_list)
     # Include supplementary
     if supplementary:
