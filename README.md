@@ -20,11 +20,9 @@ Python modules:
 >>> from pelitk import lex
 >>> print('AG:', lex.adv_guiraud('hi this is a test string'))
 AG: 0.8164965809277261
->>> tokens = lex.tokenize('hi this is a test string')
+>>> tokens = lex.re_tokenize('hi this is a test string')
 >>> print(tokens)
 ['hi', 'this', 'is', 'a', 'test', 'string']
->>> print(lex.lemmatize(tokens))
-['hello', 'this', 'be', 'a', 'test', 'string']
 ```
 
 ```python
