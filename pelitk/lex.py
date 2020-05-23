@@ -16,8 +16,8 @@ __author__ = 'Pitt ELI Data Mining Group'
 FILE_MAP = {
     'NGSL': resource_filename('pelitk', 'data/wordlists/ngsl_2k.txt'),
     'PSL3': resource_filename('pelitk', 'data/wordlists/psl3.txt'),
-    'ENABLE1': resource_filename('pelitk', 'data/wordlists/enable1.txt',
-    'SUPP': resource_filename('pelitk', 'data/wordlists/supplementary.txt)                                ),
+    'ENABLE1': resource_filename('pelitk', 'data/wordlists/enable1.txt'),
+    'SUPP': resource_filename('pelitk', 'data/wordlists/supplementary.txt')                                ),
 }
 # lookup table created from NGSL and spaCy word lists
 LOOKUP = pickle.loads(pkgutil.get_data('pelitk', 'data/lemmatizer.pkl'))
