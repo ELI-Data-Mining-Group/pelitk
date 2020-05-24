@@ -81,9 +81,10 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None,
     else:
         if freq_list not in FILE_MAP:
             raise KeyError(
-                """Please specify an appropriate frequency list with
-                the custom_list arg or set freq_list to one of {}
-                """.format(FILE_MAP.keys()))
+                "Please specify set freq_list to one of {}".format(
+                    ", ".join(FILE_MAP.keys()))
+            )
+
         common_types = _load_wordlist(freq_list)
     # Include supplementary
     if supplementary:
@@ -104,9 +105,10 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None,
         # already tokens?
         tokens = text
 
-    if not len(tokens) == 0:
+    if len(tokens) == 0:
         return 0
 
+    # TODO: do we really need to support a list of list of tokens?
     if isinstance(tokens[0], list):
         res = []
         # tokens is a list of lists of tokens
