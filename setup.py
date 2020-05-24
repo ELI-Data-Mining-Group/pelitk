@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from setuptools import setup, find_packages
 import sys
 from os import path
+from setuptools import setup, find_packages
 
 
 here = path.abspath(path.dirname(__file__))
