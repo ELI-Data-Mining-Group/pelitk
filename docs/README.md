@@ -2,4 +2,4 @@
 
 `pelitk`:
 - [`lex`](LEX.md)
-- [`conc`]CONC.md)
+- [`conc`](CONC.md)
