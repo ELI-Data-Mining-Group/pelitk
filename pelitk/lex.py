@@ -53,8 +53,12 @@ def spellcheck_filter(tokens):
     return [t for t in tokens if wordnet.synsets(LOOKUP.get(t, t))]
 
 
-def adv_guiraud(text, freq_list='NGSL', custom_list=None,
-                spellcheck=True, supplementary=True, lemmas=False):
+def adv_guiraud(text,
+                freq_list='NGSL',
+                custom_list=None,
+                spellcheck=True,
+                supplementary=True,
+                lemmas=False):
     """ Calculates advanced guiraud: advanced types / sqrt(number of tokens)
 
     By default, uses NGSL top 2k words as frequency list of common types to
@@ -81,10 +85,8 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None,
         common_types = set(custom_list)
     else:
         if freq_list not in FILE_MAP:
-            raise KeyError(
-                "Please specify set freq_list to one of {}".format(
-                    ", ".join(FILE_MAP.keys()))
-            )
+            raise KeyError("Please specify set freq_list to one of {}".format(
+                ", ".join(FILE_MAP.keys())))
 
         common_types = _load_wordlist(freq_list)
     # Include supplementary
@@ -164,8 +166,11 @@ def _vocd_eq(N, D):
     return D / N * (np.sqrt(1 + 2 * N / D) - 1)
 
 
-def vocd(text, spellcheck=False, length_range=(35, 50),
-         num_subsamples=100, num_trials=3):
+def vocd(text,
+         spellcheck=False,
+         length_range=(35, 50),
+         num_subsamples=100,
+         num_trials=3):
     """
     Calculate 'D' with voc-D method (approximation of HD-D)
     Inspired by

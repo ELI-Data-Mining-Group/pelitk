@@ -3,8 +3,8 @@
 __version__ = '0.1'
 __author__ = 'Na-Rae Han, Ben Naismith'
 
-
 # Series of subfunctions for final 'concordance' function
+
 
 def get_node(tok_text, node, num, pos=False):
     """
@@ -21,20 +21,23 @@ def get_node(tok_text, node, num, pos=False):
             Set to True if the tok_text is a list of tuples
     """
     if pos:
-        padding = [('','')] * num              # non-word padding, in the specified size
+        padding = [('', '')] * num  # non-word padding, in the specified size
         padded = padding + tok_text + padding  # pad in front and back
         outlist = []
         for i in range(len(padded)):
             if padded[i] == node:
-                outlist.append(([x[0] for x in padded[i-num:i]], padded[i][0], [x[0] for x in padded[i+1:i+1+num]]))
+                outlist.append(
+                    ([x[0] for x in padded[i - num:i]], padded[i][0],
+                     [x[0] for x in padded[i + 1:i + 1 + num]]))
     else:
-        padding = [('')] * num                 # non-word padding, in the specified size
+        padding = [('')] * num  # non-word padding, in the specified size
         padded = padding + tok_text + padding  # pad in front and back
         outlist = []
         for i in range(len(padded)):
             if padded[i] == node:
-                outlist.append((padded[i-num:i], padded[i], padded[i+1:i+1+num]))
-    return outlist        
+                outlist.append(
+                    (padded[i - num:i], padded[i], padded[i + 1:i + 1 + num]))
+    return outlist
 
 
 def flatten(outlist):
@@ -50,7 +53,6 @@ def flatten(outlist):
     return flatlist
 
 
-
 def prettify(flatlist):
     """
     Improve the appearance of the flatlist (output of flattn function) to look like a typical
@@ -59,8 +61,7 @@ def prettify(flatlist):
     Args:
         flatlist : the output of the function flatten
     """
-    return ['{:>40} {:^12} {:<40}'.format(x,y,z) for (x,y,z) in flatlist]
-
+    return ['{:>40} {:^12} {:<40}'.format(x, y, z) for (x, y, z) in flatlist]
 
 
 def concordance(tok_text, node, num, pos=False, pretty=False):
@@ -82,7 +83,7 @@ def concordance(tok_text, node, num, pos=False, pretty=False):
     """
     if not pretty:
         if pos:
-            return flatten(get_node(tok_text, node, num,pos=True))
+            return flatten(get_node(tok_text, node, num, pos=True))
         else:
             return flatten(get_node(tok_text, node, num))
     else:
