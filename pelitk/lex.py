@@ -68,8 +68,9 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None,
             common types to ignore for AG instead of freq_list.
         spellcheck (bool): boolean flag to ignore misspelled words
             checked via enable1 wordlist + 'i' + 'a'
-        supplementary: Include NGSL supplementary vocabulary in addition to
-            specified list
+        supplementary (bool): Include NGSL supplementary vocabulary in
+            addition to specified frequency list
+        lemmas (bool): whether to lemmatize before adding to advanced type count
     Returns:
         Calculated AG
     """
@@ -109,6 +110,7 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None,
         return 0
 
     # TODO: do we really need to support a list of list of tokens?
+    # the below if/else blocks have a lot of duplicated code between them
     if isinstance(tokens[0], list):
         res = []
         # tokens is a list of lists of tokens
