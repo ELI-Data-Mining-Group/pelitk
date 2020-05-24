@@ -4,7 +4,6 @@ from setuptools import setup, find_packages
 import sys
 from os import path
 
-import nltk
 
 here = path.abspath(path.dirname(__file__))
 
@@ -29,5 +28,6 @@ setup(
     include_package_data=True
 )
 
-if 'install' in sys.argv:
+if 'install' in sys.argv or 'develop' in sys.argv:
+    import nltk
     nltk.download('wordnet')
