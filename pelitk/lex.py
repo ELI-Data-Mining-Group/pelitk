@@ -17,8 +17,9 @@ FILE_MAP = {
     'NGSL': resource_filename('pelitk', 'data/wordlists/ngsl_2k.txt'),
     'PSL3': resource_filename('pelitk', 'data/wordlists/psl3.txt'),
     'ENABLE1': resource_filename('pelitk', 'data/wordlists/enable1.txt'),
-    'SUPP': resource_filename('pelitk', 'data/wordlists/supplementary.txt')                                ),
+    'SUPP': resource_filename('pelitk', 'data/wordlists/supplementary.txt')
 }
+
 # lookup table created from NGSL and spaCy word lists
 LOOKUP = pickle.loads(pkgutil.get_data('pelitk', 'data/lemmatizer.pkl'))
 
@@ -30,34 +31,50 @@ def _load_wordlist(key):
 
 
 def re_tokenize(text):
-    """
-    Regular expression tokenizer. Lowercases input and removes symbols/digits.
+    """ regex tokenizer that lowercases input and removes symbols/digits.
 
     Args:
-        text: An input string
+        text (str): An input string
     Returns:
         List of tokens found in input string
     """
     return re.findall(r"[A-Za-z]+", text.lower())
 
 
-def adv_guiraud(text, freq_list='NGSL', custom_list=None,
-                spellcheck=True, supplementary=True, lemmas=False):
-    """
-    Calculates advanced guiraud: advanced types / sqrt(number of tokens)
-    By default, uses NGSL top 2k words as frequency list
-    custom_list is a custom list of common types for frequency list
+def spellcheck_filter(tokens):
+    """ Remove tokens whose lemmas do not appear in wordnet.synsets()
 
     Args:
-        text: Input string to calculate AG for
-        freq_list: string specifying which freq list to use. Must be one
-                   of {'NGSL','PELIC', 'SUPP'}
-        custom_list: if not None, used instead of freq_list (can pass own list
-                     of strings containing common types to ignore for AG
-        spellcheck: Boolean flag to ignore misspelled words (rough spellcheck
-                    with enable1 + 'i' + 'a')
-        supplementary: Include NGSL supplementary vocabulary in addition to
-                       specified list
+        tokens (List[str]): input list of tokens
+
+    Returns:
+        filtered list of tokens
+    """
+    return [t for t in tokens if wordnet.synsets(LOOKUP.get(t, t))]
+
+
+def adv_guiraud(text,
+                freq_list='NGSL',
+                custom_list=None,
+                spellcheck=True,
+                supplementary=True,
+                lemmas=False):
+    """ Calculates advanced guiraud: advanced types / sqrt(number of tokens)
+
+    By default, uses NGSL top 2k words as frequency list of common types to
+    ignore.
+
+    Args:
+        text (str): Input string to calculate AG for
+        freq_list (str): string specifying which freq list to use. Must be one
+            of {'NGSL','PELIC', 'SUPP'}
+        custom_list (List[str]): if not None, used as a list of
+            common types to ignore for AG instead of freq_list.
+        spellcheck (bool): boolean flag to ignore misspelled words
+            checked via enable1 wordlist + 'i' + 'a'
+        supplementary (bool): Include NGSL supplementary vocabulary in
+            addition to specified frequency list
+        lemmas (bool): whether to lemmatize before adding to advanced type count
     Returns:
         Calculated AG
     """
@@ -68,18 +85,23 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None,
         common_types = set(custom_list)
     else:
         if freq_list not in FILE_MAP:
-            raise KeyError("""Please specify an appropriate frequency list with
-                              custom_list or set freq_list to one of NGSL, PSL, 
-                              SUPP.""")
+            raise KeyError("Please specify set freq_list to one of {}".format(
+                ", ".join(FILE_MAP.keys())))
+
         common_types = _load_wordlist(freq_list)
     # Include supplementary
     if supplementary:
         common_types = common_types.union(_load_wordlist('SUPP'))
 
+    # TODO: can we use the same spellchecking everywhere?
+    # here we use enable1, elsewhere we use wordnet.synsets()
     dictionary = _load_wordlist('ENABLE1')
     dictionary.add('i')
     dictionary.add('a')
 
+    # TODO: we inconsistently allow str or list input to AG, but
+    # only str to the other methods (voc-D, mtld, etc)
+    # we should pick one and keep it consistent
     if isinstance(text, str):
         tokens = re_tokenize(text)
     else:
@@ -89,6 +111,8 @@ def adv_guiraud(text, freq_list='NGSL', custom_list=None,
     if len(tokens) == 0:
         return 0
 
+    # TODO: do we really need to support a list of list of tokens?
+    # the below if/else blocks have a lot of duplicated code between them
     if isinstance(tokens[0], list):
         res = []
         # tokens is a list of lists of tokens
@@ -142,18 +166,33 @@ def _vocd_eq(N, D):
     return D / N * (np.sqrt(1 + 2 * N / D) - 1)
 
 
-def vocd(text, spellcheck=False, length_range=(35, 50),
-         num_subsamples=100, num_trials=3):
+def vocd(text,
+         spellcheck=False,
+         length_range=(35, 50),
+         num_subsamples=100,
+         num_trials=3):
     """
     Calculate 'D' with voc-D method (approximation of HD-D)
     Inspired by
     https://metacpan.org/pod/release/AXANTHOS/Lingua-Diversity-0.07/lib/Lingua/Diversity/VOCD.pm
 
     Args:
-        text:
+        text (str): input text string to compute voc-D measure for
+        spellcheck (bool): if True, exclude words whose lemmas
+            are not in nltk.wordnet.synsets
+        length_range ((int, int)): tuple of the range of sample sizes
+            to use in computing voc-D
+        num_subsamples (int): number of subsamples to take per sample
+            size
+        num_trials (int): number of trials to average over
+
+    Returns:
+        avg_D (float): estimated D value
     """
-    tokens = [x for x in re_tokenize(
-        text) if not spellcheck or wordnet.synsets(LOOKUP.get(x, x))]
+    tokens = [x for x in re_tokenize(text)]
+    if spellcheck:
+        tokens = spellcheck_filter(tokens)
+
     if len(tokens) < length_range[1]:
         raise ValueError("""Sample size greater than population!. Either reduce
                             the bounds of length_range or try a different
@@ -176,19 +215,21 @@ def vocd(text, spellcheck=False, length_range=(35, 50),
     return avg_d
 
 
-def ttr(tokens):
+def ttr(text):
     """
     Calculate Type-Token Ratio
     """
-    return len(set(tokens)) / len(tokens)
+    return len(set(re_tokenize(text))) / len(re_tokenize(text))
 
 
 def mtld(text, spellcheck=False, factor_size=0.72):
     """
     Implements the Measure of Textual Lexical Diversity (MTLD)
     """
-    tokens = [x for x in re_tokenize(
-        text) if not spellcheck or wordnet.synsets(LOOKUP.get(x, x))]
+    tokens = [x for x in re_tokenize(text)]
+    if spellcheck:
+        tokens = spellcheck_filter(tokens)
+
     forward_factor_count = _mtld_pass(tokens, factor_size)
     backward_factor_count = _mtld_pass(tokens[::-1], factor_size)
     if forward_factor_count == 0 or backward_factor_count == 0:
@@ -222,8 +263,9 @@ def maas(text, spellcheck=False):
     """
     Compute the a^2 Maas index.
     """
-    tokens = [x for x in re_tokenize(
-        text) if not spellcheck or wordnet.synsets(LOOKUP.get(x, x))]
+    tokens = [x for x in re_tokenize(text)]
+    if spellcheck:
+        tokens = spellcheck_filter(tokens)
     num_tokens = len(tokens)
     num_types = len(set(tokens))
     a_squared = math.log(num_tokens) - \
