@@ -1,4 +1,4 @@
-# PELITK: Pitt English Language Institute ToolKit
+# pelitk: Pitt English Language Institute ToolKit
 This python package contains implementations of various lexical analysis tools that are useful for SLA work.
 
 - Measuring lexical sophistication and diversity
