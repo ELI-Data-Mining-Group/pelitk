@@ -215,11 +215,15 @@ def vocd(text,
     return avg_d
 
 
-def ttr(text):
+def ttr(tokens):
     """
-    Calculate Type-Token Ratio
+    Calculate Type-Token Ratio (TTR)
+    Args:
+        tokens (List[str]): list of tokens
+    Returns:
+        TTR computed via num_unique_types / num_tokens
     """
-    return len(set(re_tokenize(text))) / len(re_tokenize(text))
+    return len(set(tokens)) / len(tokens)
 
 
 def mtld(text, spellcheck=False, factor_size=0.72):
