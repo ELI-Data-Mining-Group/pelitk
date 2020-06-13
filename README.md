@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/ELI-Data-Mining-Group/pelitk.svg?branch=master)](https://travis-ci.org/ELI-Data-Mining-Group/pelitk)
 # PELITK: Pitt English Language Institute ToolKit
 This python package contains implementations of various lexical analysis tools that are useful for SLA work.
 
