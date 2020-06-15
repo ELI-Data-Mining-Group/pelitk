@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/ELI-Data-Mining-Group/pelitk.svg?branch=master)](https://travis-ci.org/ELI-Data-Mining-Group/pelitk)
 # PELITK: Pitt English Language Institute ToolKit
 
 `pelitk` is a python package that contains implementations of various lexical analysis tools that are useful for Second Language Acquisition (SLA) work. These modules can be imported and used in Python. At present, there are two modules available:
