@@ -10,6 +10,7 @@ LONG_TOKENS = lex.re_tokenize(LONG_TEXT)
 random.seed(0)
 
 def test_re_tokenize():
+    assert False
     input_str = 'hi this is a test string'
     expected_tokens = ['hi', 'this', 'is', 'a', 'test', 'string']
 
