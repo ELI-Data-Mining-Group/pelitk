@@ -93,10 +93,10 @@ Calculates Advanced Guiraud (AG):
 
 ```python
 >>> from pelitk import lex
->>> print('AG:', lex.adv_guiraud('hi this is a test string'))
+>>> tokens = lex.re_tokenize('hi this is a test string')
+>>> print('AG:', lex.adv_guiraud(tokens))
 AG: 0.8164965809277261
 ```
-
 <br>
 
 **`vocd`**  
@@ -106,7 +106,8 @@ Calculates vocD:
   - the default requires a minimum text length of 35 words (the default number of sub-samples), though this can be optionally adjusted
 
 ```python
-print('D:', lex.vocd('hi this is a test string that needs to be at least thirty five words long in order for the calculations to work, as such, I will continue to add a few more words here in order to meet the minimum requirements of this particular function. And a few more'))
+>>> tokens = lex.re_tokenize('hi this is a test string that needs to be at least thirty five words long in order for the calculations to work, as such, I will continue to add a few more words here in order to meet the minimum requirements of this particular function. And a few more')
+>>> print('D:', lex.vocd(tokens))
 D: 62.09673137243385
 ```
 
@@ -119,7 +120,8 @@ Calculates Type-Token_Ratio (TTR):
   - practical to calculate but sensitive to text length (shorter texts have higher TTR)
 
 ```python
-print('TTR:', lex.ttr('hi this is a test string with the words test and string occurring twice'))
+>>> tokens = lex.re_tokenize('hi this is a test string with the words test and string occurring twice')
+>>> print('TTR:', lex.ttr(tokens))
 TTR: 0.8571428571428571
 ```
 
@@ -129,7 +131,8 @@ Calculates Measure of Textual Lexical Diversity (MTLD):
   - formula = complex sequential analysis of samples, generating a score based on TTR scores in the samples.
 
 ```python
-print('MTLD:', lex.mtld('hi this is a test string with the words test and string occuring twice'))
+>>> tokens = lex.re_tokenize('hi this is a test string with the words test and string occuring twice')
+>>> print('MTLD:', lex.mtld(tokens))
 MTLD: 27.439999999999994
 ```
 
@@ -141,7 +144,8 @@ Calculates Maas (log 2):
   - formula = TTR with log correction
 
 ```python
-print('Maas:', lex.maas('hi this is a test string with the words test and string occuring twice'))
+>>> tokens = lex.re_tokenize('hi this is a test string with the words test and string occuring twice')
+>>> print('Maas:', lex.maas(tokens))
 Maas: 2.28226753070723
 ```
 <br>

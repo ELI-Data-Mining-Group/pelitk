@@ -6,6 +6,7 @@ import pytest
 from pelitk import lex
 
 LONG_TEXT = 'Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do: once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it, “ and what is the use of a book,” thought Alice, “ without pictures or conversations ?” So she was considering in her own mind, (as well as she could, for the hot day made her feel very sleepy and stupid,) whether the pleasure of making a daisy-chain would be worth the trouble of getting up and picking the daisies, when suddenly a white rabbit with pink eyes ran close by her.'
+LONG_TOKENS = lex.re_tokenize(LONG_TEXT)
 random.seed(0)
 
 def test_re_tokenize():
@@ -25,23 +26,26 @@ def test_re_tokenize():
 
 def test_adv_guiraud():
     input_str = 'hi this is a test string'
+    tokens = lex.re_tokenize(input_str)
     # expect 'test' and 'string' to be advanced types
-    assert pytest.approx(lex.adv_guiraud(input_str), 2 / math.sqrt(6))
+    assert pytest.approx(lex.adv_guiraud(tokens), 2 / math.sqrt(6))
 
     input_str_zero_ag = 'this is the'
-    assert lex.adv_guiraud(input_str_zero_ag) == 0
+    tokens_str_zero_ag = lex.re_tokenize(input_str_zero_ag)
+    assert lex.adv_guiraud(tokens_str_zero_ag) == 0
 
     input_str_spell = 'this is a missspellingg'
+    tokens_str_spell = lex.re_tokenize(input_str_spell)
     # test w/ spellcheck (misspelling is removed)
     assert lex.adv_guiraud(input_str_spell) == 0
     # test w/o spellcheck
-    assert lex.adv_guiraud(input_str_spell, spellcheck=False) == 1 / math.sqrt(4)
+    assert lex.adv_guiraud(tokens_str_spell, spellcheck=False) == 1 / math.sqrt(4)
 
 
 def test_vocd():
-    assert pytest.approx(lex.vocd(LONG_TEXT)) == 83.399341
+    assert pytest.approx(lex.vocd(LONG_TOKENS)) == 83.399341
 
-    assert pytest.approx(lex.vocd(LONG_TEXT, spellcheck=True)) == 132.035466
+    assert pytest.approx(lex.vocd(LONG_TOKENS, spellcheck=True)) == 132.035466
 
 
 def test_ttr():
@@ -55,11 +59,11 @@ def test_ttr():
 
 
 def test_mtld():
-    assert pytest.approx(lex.mtld(LONG_TEXT)) == 78.277031
+    assert pytest.approx(lex.mtld(LONG_TOKENS)) == 78.277031
 
 
 def test_maas():
-    assert pytest.approx(lex.maas(LONG_TEXT)) == 4.5336033
-    assert pytest.approx(lex.maas(LONG_TEXT, spellcheck=True)) == 4.125937
+    assert pytest.approx(lex.maas(LONG_TOKENS)) == 4.5336033
+    assert pytest.approx(lex.maas(LONG_TOKENS, spellcheck=True)) == 4.125937
 
 

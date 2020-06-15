@@ -1,9 +1,9 @@
-# -*- coding: utf-8 -*-
 import pickle
 import re
 import math
 import random
 import pkgutil
+from collections import Iterable
 from pkg_resources import resource_filename
 
 from nltk.corpus import wordnet
@@ -53,7 +53,7 @@ def spellcheck_filter(tokens):
     return [t for t in tokens if wordnet.synsets(LOOKUP.get(t, t))]
 
 
-def adv_guiraud(text,
+def adv_guiraud(tokens,
                 freq_list='NGSL',
                 custom_list=None,
                 spellcheck=True,
@@ -65,7 +65,7 @@ def adv_guiraud(text,
     ignore.
 
     Args:
-        text (str): Input string to calculate AG for
+        tokens (str): Input string to calculate AG for
         freq_list (str): string specifying which freq list to use. Must be one
             of {'NGSL','PELIC', 'SUPP'}
         custom_list (List[str]): if not None, used as a list of
@@ -80,7 +80,7 @@ def adv_guiraud(text,
     """
 
     if custom_list is not None:
-        if not isinstance(custom_list, list):
+        if not isinstance(custom_list, Iterable):
             raise TypeError("Please specify a list of strings for custom_list")
         common_types = set(custom_list)
     else:
@@ -99,54 +99,23 @@ def adv_guiraud(text,
     dictionary.add('i')
     dictionary.add('a')
 
-    # TODO: we inconsistently allow str or list input to AG, but
-    # only str to the other methods (voc-D, mtld, etc)
-    # we should pick one and keep it consistent
-    if isinstance(text, str):
-        tokens = re_tokenize(text)
-    else:
-        # already tokens?
-        tokens = text
-
-    if len(tokens) == 0:
+    if not len(tokens):
         return 0
 
-    # TODO: do we really need to support a list of list of tokens?
-    # the below if/else blocks have a lot of duplicated code between them
-    if isinstance(tokens[0], list):
-        res = []
-        # tokens is a list of lists of tokens
-        for toks in tokens:
-            advanced = set()
-            for token in toks:
-                if not lemmas:
-                    lemma = LOOKUP.get(token, token)
-                else:
-                    lemma = token
-                if lemma not in common_types:
-                    if spellcheck:
-                        if lemma in dictionary:
-                            advanced.add(lemma)
-                    else:
-                        advanced.add(lemma)
-
-            res.append(len(advanced) / math.sqrt(len(toks)))
-        return res
-    else:
-        advanced = set()
-        for token in tokens:
-            if not lemmas:
-                lemma = LOOKUP.get(token, token)
-            else:
-                lemma = token
-            if lemma not in common_types:
-                if spellcheck:
-                    if lemma in dictionary:
-                        advanced.add(lemma)
-                else:
+    advanced = set()
+    for token in tokens:
+        if not lemmas:
+            lemma = LOOKUP.get(token, token)
+        else:
+            lemma = token
+        if lemma not in common_types:
+            if spellcheck:
+                if lemma in dictionary:
                     advanced.add(lemma)
+            else:
+                advanced.add(lemma)
 
-        return len(advanced) / math.sqrt(len(tokens))
+    return len(advanced) / math.sqrt(len(tokens))
 
 
 def _estimate_d(N, TTR):
@@ -166,7 +135,7 @@ def _vocd_eq(N, D):
     return D / N * (np.sqrt(1 + 2 * N / D) - 1)
 
 
-def vocd(text,
+def vocd(tokens,
          spellcheck=False,
          length_range=(35, 50),
          num_subsamples=100,
@@ -177,7 +146,7 @@ def vocd(text,
     https://metacpan.org/pod/release/AXANTHOS/Lingua-Diversity-0.07/lib/Lingua/Diversity/VOCD.pm
 
     Args:
-        text (str): input text string to compute voc-D measure for
+        tokens (list): input text string to compute voc-D measure for
         spellcheck (bool): if True, exclude words whose lemmas
             are not in nltk.wordnet.synsets
         length_range ((int, int)): tuple of the range of sample sizes
@@ -189,7 +158,6 @@ def vocd(text,
     Returns:
         avg_D (float): estimated D value
     """
-    tokens = [x for x in re_tokenize(text)]
     if spellcheck:
         tokens = spellcheck_filter(tokens)
 
@@ -226,11 +194,10 @@ def ttr(tokens):
     return len(set(tokens)) / len(tokens)
 
 
-def mtld(text, spellcheck=False, factor_size=0.72):
+def mtld(tokens, spellcheck=False, factor_size=0.72):
     """
     Implements the Measure of Textual Lexical Diversity (MTLD)
     """
-    tokens = [x for x in re_tokenize(text)]
     if spellcheck:
         tokens = spellcheck_filter(tokens)
 
@@ -263,11 +230,10 @@ def _mtld_pass(tokens, factor_size):
     return factor_count
 
 
-def maas(text, spellcheck=False):
+def maas(tokens, spellcheck=False):
     """
     Compute the a^2 Maas index.
     """
-    tokens = [x for x in re_tokenize(text)]
     if spellcheck:
         tokens = spellcheck_filter(tokens)
     num_tokens = len(tokens)
