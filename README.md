@@ -77,11 +77,15 @@ Returning to the example, we see that we have selected a _span_ of 5 words on ei
 
 It is also possible to use `conc.py` with a _list_ of key words, rather than a single key word. For a demonstration of how to do so, see the [`PELIC_concordancing_tutorial`](https://github.com/ELI-Data-Mining-Group/PELIC_dataset/blob/master/tutorials/PELIC_concordancing_tutorial.ipynb) which compiles a concordance list with a list of nine different verbs.
 
+For more example code and a full description of the functions (including their arguments and sub-functions), see [`CONC.md`](https://github.com/ELI-Data-Mining-Group/pelitk/blob/master/docs/CONC.md) and [`conc.py`](https://github.com/ELI-Data-Mining-Group/pelitk/blob/master/pelitk/conc.py).
+
 <br>
 
 ### `lex.py`
 
-There are a number of quantitative measures used for understanding and describing lexical proficiency and development. In particular, many researchers have focused on _lexical sophistication_ (the variation in ‘basic’ and ‘advanced’ words used in a text) and _lexical diversity_ (the percentage of unique words in a text). For a complete discussion of lexical proficiency, see [Leńko-Szymańska (2019)](https://www.routledge.com/Defining-and-Assessing-Lexical-Proficiency-1st-Edition/Lenko-Szymanska/p/book/9780367337926). `lex.py` provides functions to calculate a number of the more commonly used metrics of sophistication and diversity, summarized briefly below. For a full description of the functions (including their arguments and sub-functions), see [`lex.py`](https://github.com/ELI-Data-Mining-Group/pelitk/blob/master/pelitk/lex.py).
+There are a number of quantitative measures used for understanding and describing lexical proficiency and development. In particular, many researchers have focused on _lexical sophistication_ (the variation in ‘basic’ and ‘advanced’ words used in a text) and _lexical diversity_ (the percentage of unique words in a text). For a complete discussion of lexical proficiency, see [Leńko-Szymańska (2019)](https://www.routledge.com/Defining-and-Assessing-Lexical-Proficiency-1st-Edition/Lenko-Szymanska/p/book/9780367337926). `lex.py` provides functions to calculate a number of the more commonly used metrics of sophistication and diversity, summarized briefly below.
+
+For example code and a full description of the functions (including their arguments and sub-functions), see [`LEX.md`](https://github.com/ELI-Data-Mining-Group/pelitk/blob/master/docs/LEX.md) and [`lex.py`](https://github.com/ELI-Data-Mining-Group/pelitk/blob/master/pelitk/lex.py).
 
 <br>
 
@@ -91,12 +95,6 @@ Calculates Advanced Guiraud (AG):
   - formula = advanced types / sqrt(number of tokens).
   - By default, the function uses NGSL top 2k words as frequency list of common types to ignore. Optionally, other lists can be used instead.
 
-```python
->>> from pelitk import lex
->>> tokens = lex.re_tokenize('hi this is a test string')
->>> print('AG:', lex.adv_guiraud(tokens))
-AG: 0.8164965809277261
-```
 <br>
 
 **`vocd`**  
@@ -104,12 +102,6 @@ Calculates vocD:
   - measure of lexical diversity
   - formula = calculating TTR from a number of random samples then fitting a curve and reporting the parameter value
   - the default requires a minimum text length of 35 words (the default number of sub-samples), though this can be optionally adjusted
-
-```python
->>> tokens = lex.re_tokenize('hi this is a test string that needs to be at least thirty five words long in order for the calculations to work, as such, I will continue to add a few more words here in order to meet the minimum requirements of this particular function. And a few more')
->>> print('D:', lex.vocd(tokens))
-D: 62.09673137243385
-```
 
 <br>
 
@@ -119,22 +111,12 @@ Calculates Type-Token_Ratio (TTR):
   - formula = number of types / number of tokens in a text
   - practical to calculate but sensitive to text length (shorter texts have higher TTR)
 
-```python
->>> tokens = lex.re_tokenize('hi this is a test string with the words test and string occurring twice')
->>> print('TTR:', lex.ttr(tokens))
-TTR: 0.8571428571428571
-```
+<br>
 
 **`mtld`**  
 Calculates Measure of Textual Lexical Diversity (MTLD):
   - measure of lexical diversity
   - formula = complex sequential analysis of samples, generating a score based on TTR scores in the samples.
-
-```python
->>> tokens = lex.re_tokenize('hi this is a test string with the words test and string occuring twice')
->>> print('MTLD:', lex.mtld(tokens))
-MTLD: 27.439999999999994
-```
 
 <br>
 
@@ -143,11 +125,6 @@ Calculates Maas (log 2):
   - measure of lexical diversity
   - formula = TTR with log correction
 
-```python
->>> tokens = lex.re_tokenize('hi this is a test string with the words test and string occuring twice')
->>> print('Maas:', lex.maas(tokens))
-Maas: 2.28226753070723
-```
 <br>
 
 ### [Documentation](docs)
